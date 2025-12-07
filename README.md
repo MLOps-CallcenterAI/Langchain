@@ -402,11 +402,3 @@ docker restart callcenter-agent
 ### Full List
 
 See `requirements.txt` for complete dependency list.
-
----
-
-## 👥 Authors
-
-- **Medhedi Maaroufi** - MLOps Engineer & Lead Developer - [@medhedimaaroufi](https://github.com/medhedimaaroufi)
-- **Adem Sayadi** - ML Engineer & Co-Developer - [@SayadiAdem](https://github.com/AdemSayadi)
-
