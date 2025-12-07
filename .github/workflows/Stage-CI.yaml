@@ -28,7 +28,7 @@ jobs:
     needs: Get_Latest_Version
     uses: ./.github/workflows/deploy.yaml
     with:
-      filename: "manifests/default/langchain.yaml"
+      filename: "manifests/default/router-agent.yaml"
       image_version: ${{ needs.Get_Latest_Version.outputs.latest_tag }}
     secrets:
       TOKEN: ${{ secrets.TOKEN }}
