@@ -1,0 +1,37 @@
+# Workflow file for this run
+name: Stage CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  Lint:
+    uses: ./.github/workflows/lint.yaml
+
+  Build_and_Push:
+    needs: [Lint]
+    uses: ./.github/workflows/build_and_push.yaml
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  Get_Latest_Version:
+    needs: Build_and_Push
+    uses: ./.github/workflows/get_latest_version.yaml
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+  Deploy:
+    needs: Get_Latest_Version
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      filename: "manifests/default/langchain.yaml"
+      image_version: ${{ needs.Get_Latest_Version.outputs.latest_tag }}
+    secrets:
+      TOKEN: ${{ secrets.TOKEN }}
+
+
+

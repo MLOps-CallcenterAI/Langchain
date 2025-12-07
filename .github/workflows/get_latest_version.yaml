@@ -1,0 +1,39 @@
+name: Get Latest Docker Image Version
+
+on:
+  workflow_call:
+    outputs:
+      latest_tag:
+        description: "Latest Docker image tag"
+        value: ${{ jobs.get_latest_version.outputs.latest_tag }}
+    secrets:
+      DOCKER_USERNAME:
+        required: true
+      DOCKER_PASSWORD:
+        required: true
+
+jobs:
+  get_latest_version:
+    runs-on: ubuntu-latest
+    outputs:
+      latest_tag: ${{ steps.version.outputs.latest_tag }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get latest image version
+        id: version
+        run: |
+          IMAGE_NAME="medhedimaaroufi/callcenterai-router-agent"
+
+          # Fetch all tags from Docker Hub and pick the latest matching pattern
+          LATEST_TAG=$(curl -s "https://hub.docker.com/v2/repositories/${IMAGE_NAME}/tags?page_size=100" \
+            | jq -r '.results[].name' \
+            | grep -E '^v1\.0\.[0-9]+$' \
+            | sort -V \
+            | tail -n1)
+
+          echo "Latest tag: $LATEST_TAG"
+
+          # Set the step output
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
