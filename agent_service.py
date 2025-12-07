@@ -4,18 +4,19 @@ vers le modèle approprié (TF-IDF+SVM ou Transformer)
 Version corrigée avec amélioration du système de scoring
 """
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
-from typing import Optional, Dict, Any
-import httpx
-import re
-from datetime import datetime
 import logging
-from prometheus_client import Counter, Histogram, generate_latest
-from fastapi.responses import Response
-import time
 import os
+import re
+import time
+from datetime import datetime
+from typing import Any, Dict, Optional
+
+import httpx
 from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import Response
+from prometheus_client import Counter, Histogram, generate_latest
+from pydantic import BaseModel, Field
 
 # Chargement des variables d'environnement
 load_dotenv()
